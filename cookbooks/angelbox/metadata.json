@@ -1,0 +1,36 @@
+{
+    "recommendations": {
+    },
+    "attributes": {
+    },
+    "maintainer": "Noah Gibbs",
+    "suggestions": {
+    },
+    "dependencies": {
+    },
+    "maintainer_email": "noah_gibbs@yahoo.com",
+    "conflicting": {
+    },
+    "platforms": {
+      "debian": [
+
+      ],
+      "ubuntu": [
+
+      ]
+    },
+    "license": "CC0",
+    "version": "0.0.1",
+    "providing": {
+    },
+    "recipes": {
+      "angelbox": "Installs and configures angelbob.com"
+    },
+    "replacing": {
+    },
+    "name": "angelbox",
+    "description": "Installs and configures angelbob.com",
+    "groupings": {
+    },
+    "long_description": ""
+  }

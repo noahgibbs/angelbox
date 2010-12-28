@@ -5,6 +5,7 @@ Vagrant::Config.run do |config|
   #config.vm.boot_mode = :gui
 
   config.vm.provisioner = :chef_solo
-  config.chef.cookbooks_path = "cookbook"
+  #config.chef.recipe_url = ""
+  config.chef.cookbooks_path = ["cookbooks"]
   config.chef.add_recipe "angelbox"
 end
