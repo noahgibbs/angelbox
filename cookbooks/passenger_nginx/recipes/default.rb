@@ -3,10 +3,7 @@ package "libxslt1-dev"
 package "libpcre3-dev"
 package "libgd2-noxpm-dev"
 package "libssl-dev"
-
-service "nginx" do
-  supports :status => true, :restart => true, :reload => true
-end
+package "libcurl4-openssl-dev"
 
 # default options from Ubuntu 8.10
 compile_options = ["--conf-path=/etc/nginx/nginx.conf",
@@ -23,23 +20,33 @@ compile_options = ["--conf-path=/etc/nginx/nginx.conf",
                    "--with-http_geoip_module",
                    "--with-file-aio"].join(" ")
 
-nginx_source_file = "nginx-#{node[:nginx][:version]}.tar.gz"
+nginx_tar_file = "nginx-#{node[:nginx][:version]}.tar.gz"
 
-remote_file "/tmp/#{nginx_source_file}" do
-  source "http://sysoev.ru/nginx/#{nginx_source_file}"
+remote_file "/tmp/#{nginx_tar_file}" do
+  source "http://sysoev.ru/nginx/#{nginx_tar_file}"
+  not_if { File.exist? node[:nginx][:binary] }
+end
+
+execute "unpack nginx" do
+  command "tar -C /tmp -zxf /tmp/#{nginx_tar_file}"
   not_if { File.exist? node[:nginx][:binary] }
 end
 
 gem_package "passenger"
 
 execute "compile nginx with passenger" do
-  command "passenger-install-nginx-module --auto --prefix=/usr --nginx-source-dir=/tmp/#{nginx_source_file} --extra-configure-flags=\"#{compile_options}\""
-  notifies :restart, resources(:service => "nginx")
+  user "root"
+  command "passenger-install-nginx-module --auto --prefix=/usr --nginx-source-dir=/tmp/nginx-#{node[:nginx][:version]} --extra-configure-flags=\"#{compile_options}\""
+  #notifies :restart, resources(:service => "nginx") # Not 'til it exists
   not_if "nginx -V | grep passenger-enterprise-server-#{node[:nginx][:version]}"
 end
 
-execute "rm /tmp/#{nginx_source_file}" do
-  command "rm /tmp/#{nginx_source_file}"
+service "nginx" do
+  supports :status => true, :restart => true, :reload => true
+end
+
+execute "rm /tmp/#{nginx_tar_file}" do
+  command "rm /tmp/#{nginx_tar_file}"
   only_if { File.exist? node[:nginx][:binary] }
 end
 
@@ -65,13 +72,6 @@ end
 service "nginx" do
   action [ :enable, :start ]
 end
-
-nginx_site "default" do
-  enable false
-end
-
-### Passenger and compilation options
-
 
 template node[:nginx][:conf_dir] + "/passenger.conf" do
   source "nginx_passenger_conf.erb"
