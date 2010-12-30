@@ -41,6 +41,10 @@ execute "compile nginx with passenger" do
   not_if "nginx -V | grep passenger-enterprise-server-#{node[:nginx][:version]}"
 end
 
+template "/etc/init.d/nginx" do
+  source "nginx.init.erb"
+end
+
 service "nginx" do
   supports :status => true, :restart => true, :reload => true
 end
