@@ -42,6 +42,7 @@ end
 bash "make REE the default ruby" do
   user "root"
   code "rvm --default ree"
+  not_if { `rvm info | grep 'ruby:' | grep ree`.length > 0 }
 end
 
 # re-install the chef gem into REE to enable subsequent chef-client runs
