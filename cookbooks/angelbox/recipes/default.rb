@@ -8,6 +8,20 @@
 # is essentially a public domain license - do as thou wilt.
 #
 
+group "www"
+
+user "www" do
+  gid "www"
+  home "/home/www"
+  shell "/bin/bash"
+  password "$1$fkGAAO8e$S4Ul9tukFOf1iEU5k8nYK."
+end
+
+directory "/home/www" do
+  owner "www"
+  group "www"
+end
+
 # Outdated information sometimes means package won't install
 require_recipe "apt"
 
@@ -22,21 +36,16 @@ require_recipe "rvm_ree_default"
 
 require_recipe "passenger_nginx"
 
-group "www"
-
-user "www" do
-  action :create
-  gid "www"
-  password "$1$fkGAAO8e$S4Ul9tukFOf1iEU5k8nYK."
+directory "/home/www/checkouts" do
+  owner "www"
+  group "www"
 end
-
-directory "/home/www/checkouts"
 
 [ "blog", "www_static", "refactor_it", "wantmyjob.com", "webconf",
   "cheaptoad-catcher" ].each do |project|
   git "/home/www/checkouts/#{project}" do
     action :sync
-    repository "git@github.com:noahgibbs#{project}.git"
+    repository "git://github.com/noahgibbs/#{project}.git"
     user "www"
     group "www"
   end
