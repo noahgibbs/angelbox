@@ -38,7 +38,7 @@ execute "compile nginx with passenger" do
   user "root"
   command "passenger-install-nginx-module --auto --prefix=/usr --nginx-source-dir=/tmp/nginx-#{node[:nginx][:version]} --extra-configure-flags=\"#{compile_options}\""
   #notifies :restart, resources(:service => "nginx") # Not 'til it exists
-  not_if "nginx -V | grep passenger-enterprise-server-#{node[:nginx][:version]}"
+  not_if "nginx -V |& grep passenger"
 end
 
 template "/etc/init.d/nginx" do
@@ -54,7 +54,8 @@ end
 
 execute "rm /tmp/#{nginx_tar_file}" do
   command "rm /tmp/#{nginx_tar_file}"
-  only_if { File.exist? node[:nginx][:binary] }
+  only_if { File.exist?(node[:nginx][:binary]) &&
+            File.exist?("/tmp/#{nginx_tar_file}") }
 end
 
 # Set up nginx
@@ -78,12 +79,4 @@ end
 
 service "nginx" do
   action [ :enable, :start ]
-end
-
-template node[:nginx][:conf_dir] + "/passenger.conf" do
-  source "nginx_passenger_conf.erb"
-  owner "root"
-  group "root"
-  mode 0755
-  notifies :restart, resources(:service => "nginx")
 end

@@ -9,14 +9,14 @@
 #
 
 # Source function library.
-. /etc/rc.d/init.d/functions
+. /lib/lsb/init-functions
 
 # Source networking configuration.
-. /etc/sysconfig/network
+#. /etc/sysconfig/network
 
 # Check that networking is up.
-[ "$NETWORKING" = "no" ] && exit
-exec=<%= node[:nginx][:src_binary] %>
+#[ "$NETWORKING" = "no" ] && exit
+exec=<%= node[:nginx][:binary] %>
 prog=$(basename $exec)
 
 # default options, overruled by items in sysconfig
