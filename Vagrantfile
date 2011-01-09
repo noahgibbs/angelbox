@@ -1,5 +1,5 @@
 Vagrant::Config.run do |config|
-  config.vm.box = "lucid32"
+  config.vm.box = "base"
 
   # For debugging, opens a window when running
   #config.vm.boot_mode = :gui
