@@ -31,10 +31,15 @@ bash "install RVM" do
   code "bash < <( curl -L http://bit.ly/rvm-install-system-wide )"
   only_if { `which rvm`.chomp == "" }
 end
-cookbook_file "/etc/profile.d/rvm.sh"
+
+cookbook_file "/etc/profile.d/rvm.sh" do
+  owner "root"
+  group "root"
+  mode "0755"
+end
 
 bash "install REE in RVM" do
-  user "root"
+  user "www"
   code "rvm install ree"
   not_if "rvm list | grep ree"
 end

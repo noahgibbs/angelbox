@@ -8,6 +8,9 @@
 # is essentially a public domain license - do as thou wilt.
 #
 
+# Needed for setting passwords
+require_recipe "ruby-shadow"
+
 group "www"
 
 user "www" do
@@ -25,9 +28,6 @@ end
 # Outdated information sometimes means package won't install
 require_recipe "apt"
 
-# Needed for setting passwords
-require_recipe "ruby-shadow"
-
 # includes build-essential, for gems with native extensions
 require_recipe "build"
 
@@ -41,6 +41,9 @@ directory "/home/www/checkouts" do
   group "www"
 end
 
+# Development gems
+gem_package "bundler"
+
 [ "blog", "www_static", "refactor_it", "wantmyjob.com", "webconf",
   "cheaptoad-catcher" ].each do |project|
   git "/home/www/checkouts/#{project}" do
@@ -49,4 +52,20 @@ end
     user "www"
     group "www"
   end
+
+  directory "/home/www/checkouts/#{project}/tmp" do
+    owner "www"
+    group "www"
+  end
+
+  bash "bundler installation" do
+    command "bundle install"
+    cwd "/home/www/checkouts/#{project}"
+  end
+
+  bash "passenger restart" do
+    command "touch tmp/restart.txt"
+    cwd "/home/www/checkouts/#{project}"
+  end
+
 end
