@@ -40,6 +40,17 @@ end
 
 require_recipe "passenger_nginx"
 
+###########
+# Install MySQL stuff.  This belongs in a separate recipe
+package "libmysqlclient-dev"
+###########
+# Install SQLite stuff.  This belongs in a separate recipe
+package "sqlite3"
+package "libsqlite3-dev"
+###########
+
+
+
 directory "/home/www/checkouts" do
   owner "www"
   group "www"
