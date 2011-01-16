@@ -2,6 +2,7 @@
 directory node[:railsframe][:dir] do
   owner node[:railsframe][:user]
   group node[:railsframe][:group]
+  recursive true
 end
 
 unless node[:railsframe][:apps].respond_to?(:each)
