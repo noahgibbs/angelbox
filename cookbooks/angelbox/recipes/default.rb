@@ -25,7 +25,7 @@ directory "/home/www" do
   group "www"
 end
 
-# Outdated information sometimes means package won't install
+# Outdated information sometimes means packages won't install - update
 require_recipe "apt"
 
 # includes build-essential, for gems with native extensions
@@ -48,8 +48,6 @@ package "libmysqlclient-dev"
 package "sqlite3"
 package "libsqlite3-dev"
 ###########
-
-
 
 directory "/home/www/checkouts" do
   owner "www"

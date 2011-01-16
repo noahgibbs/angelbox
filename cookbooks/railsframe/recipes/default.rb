@@ -18,9 +18,10 @@ node[:railsframe][:apps].each do |app|
     app[:name] ||= app[:github]
   end
 
+  project = app[:dir] || app[:name]
+  dir = "#{node[:railsframe][:dir]}/#{project}"
   if app[:git]
-    project = app[:dir] || app[:name]
-    git "#{node[:railsframe][:dir]}/#{project}" do
+    git dir do
       action :sync
       repository app[:git]
       user node[:railsframe][:user]
@@ -30,4 +31,19 @@ node[:railsframe][:apps].each do |app|
     raise "Couldn't find a git repository!"
   end
 
+  directory "#{dir}/tmp" do
+    owner node[:railsframe][:user]
+    group node[:railsframe][:group]
+  end
+
+  bash "bundler installation" do
+    code "bundle install"
+    cwd dir
+    only_if { File.exist? "#{dir}/Gemfile" }
+  end
+
+  bash "passenger restart" do
+    code "touch tmp/restart.txt"
+    cwd dir
+  end
 end
