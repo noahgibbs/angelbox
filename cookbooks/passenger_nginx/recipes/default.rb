@@ -66,6 +66,15 @@ directory node[:nginx][:log_dir] do
   action :create
 end
 
+%w{nxensite nxdissite}.each do |nxscript|
+  template "/usr/sbin/#{nxscript}" do
+    source "#{nxscript}.erb"
+    mode 0755
+    owner "root"
+    group "root"
+  end
+end
+
 cookbook_file "#{node[:nginx][:dir]}/mime.types"
 
 template "nginx.conf" do
@@ -77,6 +86,6 @@ template "nginx.conf" do
   notifies :reload, resources(:service => "nginx")
 end
 
-service "nginx" do
-  action [ :enable, :start ]
+nginx_site "default" do
+  enable false
 end
