@@ -39,7 +39,7 @@ cookbook_file "/etc/profile.d/rvm.sh" do
 end
 
 bash "install REE in RVM" do
-  user "www"
+  user "root"
   code "rvm install ree"
   not_if "rvm list | grep ree"
 end

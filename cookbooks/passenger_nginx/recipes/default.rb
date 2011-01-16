@@ -38,7 +38,7 @@ execute "compile nginx with passenger" do
   user "root"
   command "passenger-install-nginx-module --auto --prefix=/usr --nginx-source-dir=/tmp/nginx-#{node[:nginx][:version]} --extra-configure-flags=\"#{compile_options}\""
   #notifies :restart, resources(:service => "nginx") # Not 'til it exists
-  not_if "nginx -V |& grep passenger"
+  not_if "bash -c \"nginx -V |& grep passenger\""
 end
 
 template "/etc/init.d/nginx" do

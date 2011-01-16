@@ -34,6 +34,10 @@ require_recipe "build"
 # Install RVM and Ruby Enterprise Edition
 require_recipe "rvm_ree_default"
 
+group "rvm" do
+  members ['www']
+end
+
 require_recipe "passenger_nginx"
 
 directory "/home/www/checkouts" do
@@ -59,12 +63,13 @@ gem_package "bundler"
   end
 
   bash "bundler installation" do
-    command "bundle install"
+    code "bundle install"
     cwd "/home/www/checkouts/#{project}"
+    only_if { File.exist? "/home/www/checkouts/#{project}/Gemfile" }
   end
 
   bash "passenger restart" do
-    command "touch tmp/restart.txt"
+    code "touch tmp/restart.txt"
     cwd "/home/www/checkouts/#{project}"
   end
 
