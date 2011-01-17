@@ -82,8 +82,20 @@ template "nginx.conf" do
   source "nginx.conf.erb"
   owner "root"
   group "root"
-  mode 0644
+  mode "0755"
   notifies :reload, resources(:service => "nginx")
+end
+
+directory "#{node[:nginx][:dir]}/sites-enabled" do
+  owner node[:nginx][:user]
+  mode "0755"
+  action :create
+end
+
+directory "#{node[:nginx][:dir]}/sites-available" do
+  owner node[:nginx][:user]
+  mode "0755"
+  action :create
 end
 
 nginx_site "default" do

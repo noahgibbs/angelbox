@@ -19,6 +19,8 @@ node[:railsframe][:apps].each do |app|
   end
 
   project = app[:dir] || app[:name]
+  raise "RailsFrame app should have a name!" unless project
+  app[:name] = project
   dir = "#{node[:railsframe][:dir]}/#{project}"
   if app[:git]
     git dir do
@@ -46,4 +48,15 @@ node[:railsframe][:apps].each do |app|
     code "touch tmp/restart.txt"
     cwd dir
   end
+
+  config_path = "#{node[:nginx][:dir]}/sites-available/#{project}"
+  template config_path do
+    source "nginx-site.conf"
+    owner "root"
+    group "root"
+    mode '0755'
+    variables :app => app
+  end
+
+  nginx_site :enable => true, :name => app[:name]
 end
