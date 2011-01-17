@@ -57,8 +57,7 @@ end
 # Development gems
 gem_package "bundler"
 
-[ "blog", "www_static", "refactor_it", "wantmyjob.com", "webconf",
-  "cheaptoad-catcher" ].each do |project|
+[ "www_static", "webconf" ].each do |project|
   git "/home/www/checkouts/#{project}" do
     action :sync
     repository "git://github.com/noahgibbs/#{project}.git"

@@ -19,7 +19,7 @@ Vagrant::Config.run do |config|
   config.chef.json[:railsframe] = {
     :github_user => 'noahgibbs',
     :apps => [
-      { :github => "www_static" }
+      { :github => "blog" }
     ]
   }
 end
