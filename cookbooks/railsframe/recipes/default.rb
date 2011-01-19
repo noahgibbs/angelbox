@@ -58,5 +58,7 @@ node[:railsframe][:apps].each do |app|
     variables :app => app
   end
 
-  nginx_site :enable => true, :name => app[:name]
+  nginx_site app[:name] do
+    enable true
+  end
 end

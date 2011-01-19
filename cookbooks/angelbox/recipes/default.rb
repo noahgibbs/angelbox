@@ -88,4 +88,6 @@ template "/etc/nginx/sites-available/www_static" do
   mode "0755"
 end
 
-nginx_site :enabled => true, :name => "www_static"
+nginx_site "www_static" do
+  enabled true
+end

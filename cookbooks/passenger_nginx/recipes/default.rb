@@ -48,6 +48,12 @@ template "/etc/init.d/nginx" do
   mode "0755"
 end
 
+directory "/var/lib/nginx" do
+  mode 0755
+  owner node[:nginx][:user]
+  action :create
+end
+
 service "nginx" do
   supports :status => true, :restart => true, :reload => true
   action [:enable, :start]
@@ -62,12 +68,6 @@ end
 # Set up nginx
 
 directory node[:nginx][:log_dir] do
-  mode 0755
-  owner node[:nginx][:user]
-  action :create
-end
-
-directory "/var/lib/nginx" do
   mode 0755
   owner node[:nginx][:user]
   action :create
