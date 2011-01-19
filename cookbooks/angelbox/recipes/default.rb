@@ -82,12 +82,12 @@ gem_package "bundler"
   end
 end
 
-template "/etc/nginx/sites-available/www_static" do
-  owner "root"
-  group "root"
-  mode "0755"
-end
+#template "/etc/nginx/sites-available/www_static" do
+#  owner "root"
+#  group "root"
+#  mode "0755"
+#end
 
-nginx_site "www_static" do
-  enabled true
-end
+#nginx_site "www_static" do
+#  enabled true
+#end
