@@ -80,5 +80,12 @@ gem_package "bundler"
     code "touch tmp/restart.txt"
     cwd "/home/www/checkouts/#{project}"
   end
-
 end
+
+template "/etc/nginx/sites-available/www_static" do
+  owner "root"
+  group "root"
+  mode "0755"
+end
+
+nginx_site :enabled => true, :name => "www_static"

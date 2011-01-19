@@ -50,6 +50,7 @@ end
 
 service "nginx" do
   supports :status => true, :restart => true, :reload => true
+  action [:enable, :start]
 end
 
 execute "rm /tmp/#{nginx_tar_file}" do
@@ -61,6 +62,12 @@ end
 # Set up nginx
 
 directory node[:nginx][:log_dir] do
+  mode 0755
+  owner node[:nginx][:user]
+  action :create
+end
+
+directory "/var/lib/nginx" do
   mode 0755
   owner node[:nginx][:user]
   action :create
@@ -84,6 +91,12 @@ template "nginx.conf" do
   group "root"
   mode "0755"
   notifies :reload, resources(:service => "nginx")
+end
+
+directory "#{node[:nginx][:dir]}/conf.d" do
+  owner node[:nginx][:user]
+  mode "0755"
+  action :create
 end
 
 directory "#{node[:nginx][:dir]}/sites-enabled" do
