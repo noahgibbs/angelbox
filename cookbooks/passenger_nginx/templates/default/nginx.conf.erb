@@ -17,6 +17,9 @@ http {
 
   access_log	<%= @node[:nginx][:log_dir] %>/access.log;
 
+  passenger_root /usr/lib/ruby/gems/1.8/gems/passenger-<%= node[:passenger][:version] %>;
+  passenger_ruby /usr/bin/ruby;
+
   sendfile on;
   tcp_nopush on;
   tcp_nodelay on;

@@ -32,7 +32,9 @@ execute "unpack nginx" do
   not_if { File.exist? node[:nginx][:binary] }
 end
 
-gem_package "passenger"
+gem_package "passenger" do
+  version node[:passenger][:version]
+end
 
 execute "compile nginx with passenger" do
   user "root"

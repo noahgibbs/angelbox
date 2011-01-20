@@ -11,6 +11,24 @@
 # Needed for setting passwords
 require_recipe "ruby-shadow"
 
+# Make sure we've got all the good Ruby basics (these should be no-ops by
+# now):
+apt_package "build-essential"
+apt_package "bison"
+apt_package "openssl"
+apt_package "libreadline6"
+apt_package "libreadline6-dev"
+apt_package "curl"
+apt_package "zlib1g-dev"
+apt_package "libssl-dev"
+apt_package "libyaml-dev"
+apt_package "libsqlite3-dev"
+apt_package "sqlite3"
+apt_package "libxml2-dev"
+#apt_package "libxslt-dev"
+apt_package "autoconf"
+apt_package "libc6-dev"
+
 group "www"
 
 user "www" do
