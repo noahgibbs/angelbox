@@ -45,6 +45,7 @@ node[:railsframe][:apps].each do |app|
   end
 
   bash "passenger restart" do
+    user node[:railsframe][:user]
     code "touch tmp/restart.txt"
     cwd dir
   end
