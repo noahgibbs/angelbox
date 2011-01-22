@@ -11,6 +11,9 @@
 # Needed for setting passwords
 require_recipe "ruby-shadow"
 
+# Outdated information sometimes means packages won't install - update
+require_recipe "apt"
+
 # Make sure we've got all the good Ruby basics (these should be no-ops by
 # now):
 apt_package "build-essential"
@@ -28,6 +31,7 @@ apt_package "libxml2-dev"
 #apt_package "libxslt-dev"
 apt_package "autoconf"
 apt_package "libc6-dev"
+apt_package "git-core"
 
 group "www"
 
@@ -43,14 +47,11 @@ directory "/home/www" do
   group "www"
 end
 
-# Outdated information sometimes means packages won't install - update
-require_recipe "apt"
-
 # includes build-essential, for gems with native extensions
 require_recipe "build"
 
 # Install RVM and Ruby Enterprise Edition
-require_recipe "rvm_ree_default"
+#require_recipe "rvm_ree_default"
 
 group "rvm" do
   members ['www']
