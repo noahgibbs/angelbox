@@ -13,16 +13,25 @@ node[:railsframe][:apps].each do |app|
   raise "railsframe[:apps] must be Array of Hash!" unless app.kind_of?(Hash)
 
   if app[:github]
+    # TODO: separate this into a library, support URLs
     app[:github] = app[:github].gsub(/\.git$/, "")
-    app[:git] = "git://github.com/#{node[:railsframe][:github_user]}/#{app[:github]}.git"
-    app[:name] ||= app[:github]
+    if(app[:github] =~ /\//)
+      github_user, github_repo = app[:github].split("/", 2)
+    else
+      github_user = node[:railsframe][:user]
+      github_repo = app[:github]
+    end
+
+    app[:git] = "git://github.com/#{github_user}/#{github_repo}.git"
   end
 
   project = app[:dir] || app[:name]
   raise "RailsFrame app should have a name!" unless project
   app[:name] = project
   dir = "#{node[:railsframe][:dir]}/#{project}"
-  if app[:git]
+  if app[:mounted]
+    # Do nothing yet
+  elsif app[:git]
     git dir do
       action :sync
       repository app[:git]
@@ -45,9 +54,12 @@ node[:railsframe][:apps].each do |app|
   end
 
   bash "passenger restart" do
-    user node[:railsframe][:user]
     code "touch tmp/restart.txt"
     cwd dir
+  end
+
+  file "#{dir}/tmp/restart.txt" do
+    owner node[:railsframe][:user]
   end
 
   config_path = "#{node[:nginx][:dir]}/sites-available/#{project}"
